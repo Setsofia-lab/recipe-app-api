@@ -244,7 +244,7 @@ class PrivateRecipeApiTests(TestCase):
 
         payload = {'tags': [{'name':'Lunch'}]}
         url = detail_url(recipe.id)
-        res = self.client.patch(url, payload, formay='json')
+        res = self.client.patch(url, payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         new_tag = Tag.objects.get(user=self.user, name='Lunch')
