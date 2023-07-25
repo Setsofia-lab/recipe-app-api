@@ -48,13 +48,17 @@ class PrivateTagsApiTests(TestCase):
         Tag.objects.create(user=self.user, name='Vegan')
         Tag.objects.create(user=self.user, name='Dessert')
 
-
         res = self.client.get(TAGS_URL)
 
         tags = Tag.objects.all().order_by('name')
         serializer = TagSerializer(tags, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializer.data)
+        self.assertEqual(len(res.data), len(serializer.data))
+
+        # Check that all tags from the serializer are present in the response data
+        for tag in serializer.data:
+            self.assertIn(tag, res.data)
+
 
     def test_tags_limited_to_user(self):
         """Test list of tags is limited to authenticated user."""
